@@ -319,7 +319,11 @@ bool UModularGameplayAbility::DoesAbilitySatisfyTagRequirements(const UAbilitySy
 	const FGameplayTag& MissingTag = AbilitySystemGlobals.ActivateFailTagsMissingTag;
 
 	// Check if any of this ability's tags are currently blocked
+#if ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 5
 	if (AbilitySystemComponent.AreAbilityTagsBlocked(GetAssetTags()))
+#else
+	if (AbilitySystemComponent.AreAbilityTagsBlocked(AbilityTags))
+#endif
 	{
 		bBlocked = true;
 	}
@@ -334,7 +338,11 @@ bool UModularGameplayAbility::DoesAbilitySatisfyTagRequirements(const UAbilitySy
 	// Expand our ability tags to add additional required/blocked tags
 	if (AbilityComponent)
 	{
+#if ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 5
 		AbilityComponent->GetAdditionalActivationTagRequirements(GetAssetTags(), AllRequiredTags, AllBlockedTags);
+#else
+		AbilityComponent->GetAdditionalActivationTagRequirements(AbilityTags, AllRequiredTags, AllBlockedTags);
+#endif
 	}
 
 	// Check to see the required/blocked tags for this ability

@@ -92,7 +92,11 @@ void UModularAbilitySet::GiveToAbilitySystem(UModularAbilitySystemComponent* Mod
 
 		FGameplayAbilitySpec AbilitySpec(AbilityCDO, AbilityToGrant.AbilityLevel);
 		AbilitySpec.SourceObject = SourceObject;
+#if ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 5
 		AbilitySpec.GetDynamicSpecSourceTags().AddTag(AbilityToGrant.InputTag);
+#else
+		AbilitySpec.DynamicAbilityTags.AddTag(AbilityToGrant.InputTag);
+#endif
 
 		const FGameplayAbilitySpecHandle AbilitySpecHandle = ModularASC->GiveAbility(AbilitySpec);
 
